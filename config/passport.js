@@ -4,7 +4,7 @@ const keys = require("./keys");
 // Load user model
 const User = mongoose.model("users");
 
-module.exports = passport => {
+module.exports = function(passport) {
   passport.use(
     new GoogleStrategy(
       {
@@ -16,6 +16,7 @@ module.exports = passport => {
       (accessToken, refreshToken, profile, done) => {
         // console.log(accessToken);
         // console.log(profile);
+
         const image = profile.photos[0].value.substring(
           0,
           profile.photos[0].value.indexOf("?")
@@ -29,7 +30,7 @@ module.exports = passport => {
           image: image
         };
 
-        // Check for  existing user
+        // Check for existing user
         User.findOne({
           googleID: profile.id
         }).then(user => {
